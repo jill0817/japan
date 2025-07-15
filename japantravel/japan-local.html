@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>日本鄉下深度旅遊推薦</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+
+    <style>
+      :root {
+        --theme-color: rgba(152, 57, 255, 0.7);
+        --theme-color-light: rgba(152, 57, 255, 0.5);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Noto Sans JP", "Yu Gothic UI", "Hiragino Kaku Gothic ProN",
+          "Meiryo", sans-serif;
+      }
+
+      body {
+        background-color: #fff;
+        color: #333;
+        line-height: 1.6;
+        padding: 1rem;
+      }
+
+      h3 {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 1.5rem;
+        font-size: 2rem;
+        text-align: center;
+      }
+
+      .search-filter {
+        background-color: #fefefe;
+        padding: 3rem 1rem;
+        text-align: center;
+        border-radius: 1rem;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        max-width: 600px;
+        margin: 2rem auto;
+      }
+
+      .search-bar {
+        display: flex;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .search-bar input {
+        width: 280px;
+        padding: 0.65rem 1rem;
+        border: 1.5px solid var(--theme-color-light);
+        border-radius: 0.6rem;
+        font-size: 1.1rem;
+        transition: border-color 0.3s ease;
+      }
+
+      .search-bar input:focus {
+        outline: none;
+        border-color: var(--theme-color);
+        box-shadow: 0 0 5px var(--theme-color-light);
+      }
+
+      .search-bar button {
+        padding: 0.65rem 1.5rem;
+        background-color: var(--theme-color);
+        color: white;
+        border: none;
+        border-radius: 0.6rem;
+        font-size: 1.1rem;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+      }
+
+      .search-bar button:hover {
+        background-color: rgba(152, 57, 255, 0.9);
+      }
+
+      .filter-tags {
+        max-width: 400px;
+        margin: 0 auto;
+      }
+
+      .filter-tags span {
+        display: inline-block;
+        margin: 0.35rem 0.6rem;
+        padding: 0.45rem 1rem;
+        background-color: #eee;
+        color: #555;
+        font-size: 1rem;
+        border-radius: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        user-select: none;
+      }
+
+      .filter-tags span:hover {
+        background-color: var(--theme-color-light);
+        color: white;
+      }
+
+      .tour-recommend {
+        max-width: 1100px;
+        margin: 2rem auto 4rem auto;
+      }
+
+      .card-container {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .tour-card {
+        width: 300px;
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+        background-color: white;
+        transition: transform 0.3s ease;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        user-select: none;
+      }
+
+      .tour-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 20px rgba(152, 57, 255, 0.3);
+      }
+
+      .tour-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        display: block;
+      }
+
+      .card-content {
+        padding: 1rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .card-content h4 {
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        font-size: 1.25rem;
+        color: #333;
+      }
+
+      .card-content p {
+        color: #555;
+        line-height: 1.4;
+        margin-bottom: 0.8rem;
+        flex-grow: 1;
+      }
+
+      .rating {
+        color: #ffbb00;
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+
+      .card-content button {
+        background-color: var(--theme-color);
+        color: white;
+        border: none;
+        padding: 0.5rem 1.2rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+      }
+
+      .card-content button:hover {
+        background-color: rgba(152, 57, 255, 0.9);
+      }
+
+      .swiper-section {
+        max-width: 900px;
+        margin: 3rem auto 5rem auto;
+      }
+
+      .swiper-section h3 {
+        margin-bottom: 2rem;
+      }
+
+      .swiper-slide {
+        text-align: center;
+        user-select: none;
+      }
+
+      .swiper-slide img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        border-radius: 1rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .swiper-slide p {
+        font-size: 1rem;
+        color: #444;
+      }
+
+      @media screen and (max-width: 700px) {
+        .card-container {
+          justify-content: center;
+        }
+        .tour-card {
+          width: 90vw;
+        }
+        .search-bar {
+          flex-direction: column;
+          gap: 1rem;
+        }
+        .search-bar input {
+          width: 100%;
+        }
+        .filter-tags {
+          max-width: 100%;
+        }
+      }
+
+      .back-home {
+        max-width: 600px;
+        margin: 1rem auto 0;
+        text-align: left;
+      }
+
+      .back-home a {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background-color: var(--theme-color-light);
+        color: white;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+        user-select: none;
+      }
+
+      .back-home a:hover {
+        background-color: var(--theme-color);
+      }
+    </style>
+  </head>
+  <body>
+    <section class="search-filter">
+      <h3>找你想要的旅程</h3>
+      <div class="search-bar">
+        <input type="text" placeholder="輸入關鍵字：如金澤、四國..." />
+        <button>搜尋</button>
+      </div>
+      <div class="filter-tags">
+        <span>#東北</span>
+        <span>#藝術之旅</span>
+        <span>#美食</span>
+        <span>#自然秘境</span>
+      </div>
+    </section>
+
+    <section class="tour-recommend">
+      <h3>人氣推薦行程</h3>
+      <div class="card-container">
+        <div class="tour-card">
+          <img src="./images/青森冬季.jpg" alt="青森雪國三日遊" />
+          <div class="card-content">
+            <h4>青森雪國五日遊</h4>
+            <p>體驗津輕鐵道與蘋果溫泉，感受純白之美。</p>
+            <p class="rating">★★★★★ (125則評論)</p>
+            <button>查看詳情</button>
+          </div>
+        </div>
+        <div class="tour-card">
+          <img src="./images/金澤街景.jpg" alt="金澤慢旅二日行" />
+          <div class="card-content">
+            <h4>金澤慢旅輕鬆遊</h4>
+            <p>穿梭古街小巷，品味藝伎文化與懷石料理。</p>
+            <p class="rating">★★★★☆ (98則評論)</p>
+            <button>查看詳情</button>
+          </div>
+        </div>
+        <div class="tour-card">
+          <img src="./images/四國自然.jpg" alt="四國自然信仰巡禮" />
+          <div class="card-content">
+            <h4>四國自然信仰巡禮</h4>
+            <p>參訪遍路古道與山間神社，回歸內心寧靜。</p>
+            <p class="rating">★★★★★ (150則評論)</p>
+            <button>查看詳情</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="swiper-section">
+      <h3>更多地方風景</h3>
+      <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <img src="./images/鳥取砂丘.jpg" alt="鳥取砂丘" />
+          </div>
+          <div class="swiper-slide">
+            <img src="./images/高知市場.jpg" alt="高知在地早市" />
+          </div>
+          <div class="swiper-slide">
+            <img src="./images/山形藏王.jpg" alt="藏王樹冰" />
+          </div>
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+      </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+      const swiper = new Swiper(".mySwiper", {
+        loop: true,
+        pagination: {
+          el: ".swiper-pagination",
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+        autoplay: {
+          delay: 3500,
+          disableOnInteraction: false,
+        },
+      });
+    </script>
+
+    <div class="back-home">
+      <a href="index.html">← 回首頁</a>
+    </div>
+  </body>
+</html>

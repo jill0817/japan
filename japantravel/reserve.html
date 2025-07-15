@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>預約行程</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --theme-color: rgba(152, 57, 255, 0.85);
+        --theme-color-light: rgba(152, 57, 255, 0.1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Noto Sans JP", sans-serif;
+      }
+
+      body {
+        padding: 2rem;
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+
+      header h1 {
+        font-size: 2rem;
+        color: #333;
+      }
+
+      .nav-buttons {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .nav-buttons button {
+        background-color: var(--theme-color);
+        border: none;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+
+      .container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: center;
+      }
+
+      .tour-card {
+        width: 300px;
+        border-radius: 1rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        background: white;
+      }
+
+      .tour-card img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+      }
+
+      .card-content {
+        padding: 1rem;
+      }
+
+      .card-content h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.3rem;
+      }
+
+      .card-content p {
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 0.5rem;
+      }
+
+      .price {
+        color: var(--theme-color);
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+      }
+
+      .quantity-select {
+        margin-bottom: 1rem;
+      }
+
+      .quantity-select input {
+        width: 50px;
+        padding: 0.3rem;
+      }
+
+      .card-buttons {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .card-buttons button {
+        flex: 1;
+        margin: 0 0.2rem;
+        padding: 0.5rem;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 0.9rem;
+      }
+
+      .add-btn {
+        background-color: var(--theme-color-light);
+        color: var(--theme-color);
+        border: 1px solid var(--theme-color);
+      }
+
+      .checkout-btn {
+        background-color: var(--theme-color);
+        color: white;
+      }
+
+      /* 購物車側邊欄 */
+      .cart-sidebar {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 300px;
+        height: 100vh;
+        background-color: white;
+        box-shadow: -4px 0 10px rgba(0, 0, 0, 0.2);
+        padding: 1.5rem;
+        transition: right 0.3s ease;
+        z-index: 100;
+      }
+
+      .cart-sidebar.active {
+        right: 0;
+      }
+
+      .cart-sidebar h2 {
+        margin-bottom: 1rem;
+      }
+
+      .cart-item {
+        border-bottom: 1px solid #ddd;
+        padding: 0.5rem 0;
+      }
+
+      .cart-item span {
+        display: block;
+        font-size: 0.9rem;
+      }
+
+      .cart-total {
+        margin-top: 1rem;
+        font-weight: bold;
+      }
+
+      .cart-actions {
+        margin-top: 1rem;
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .cart-actions button {
+        flex: 1;
+        padding: 0.5rem;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+      }
+
+      .send-btn {
+        background-color: var(--theme-color);
+        color: white;
+      }
+
+      .clear-btn {
+        background-color: #eee;
+      }
+
+      @media (max-width: 768px) {
+        .tour-card {
+          width: 90vw;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>預約行程</h1>
+      <div class="nav-buttons">
+        <button onclick="window.location.href='index.html'">回首頁</button>
+        <button onclick="toggleCart()">購物車</button>
+      </div>
+    </header>
+
+    <section class="container">
+      <!-- 行程項目 -->
+      <div class="tour-card">
+        <img src="./images/青森冬季.jpg" />
+        <div class="card-content">
+          <h3>青森雪國五日遊</h3>
+          <p>雪景、溫泉、津輕鐵道，靜謐冬日旅程。</p>
+          <div class="price">NT$ 19,800</div>
+          <div class="quantity-select">
+            <label>數量：</label>
+            <input type="number" min="1" value="1" />
+          </div>
+          <div class="card-buttons">
+            <button
+              class="add-btn"
+              onclick="addToCart(this, '青森雪國五日遊', 19800)"
+            >
+              加入行程
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tour-card">
+        <img src="./images/金澤街景.jpg" />
+        <div class="card-content">
+          <h3>金澤古城散策五日遊</h3>
+          <p>走進藝伎小巷、金箔職人街。</p>
+          <div class="price">NT$ 8,500</div>
+          <div class="quantity-select">
+            <label>數量：</label>
+            <input type="number" min="1" value="1" />
+          </div>
+          <div class="card-buttons">
+            <button
+              class="add-btn"
+              onclick="addToCart(this, '金澤古城散策二日遊', 8500)"
+            >
+              加入行程
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tour-card">
+        <img src="./images/四國自然.jpg" />
+        <div class="card-content">
+          <h3>四國自然巡禮三日遊</h3>
+          <p>遍路古道、參拜神社、沉澱心靈。</p>
+          <div class="price">NT$ 14,200</div>
+          <div class="quantity-select">
+            <label>數量：</label>
+            <input type="number" min="1" value="1" />
+          </div>
+          <div class="card-buttons">
+            <button
+              class="add-btn"
+              onclick="addToCart(this, '四國自然巡禮三日遊', 14200)"
+            >
+              加入行程
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 購物車側邊欄 -->
+    <aside class="cart-sidebar" id="cart">
+      <button
+        onclick="closeCart()"
+        style="
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          background: none;
+          border: none;
+          font-size: 1.5rem;
+          cursor: pointer;
+        "
+      >
+        ❌
+      </button>
+
+      <h2>我的行程</h2>
+      <div id="cart-items"></div>
+      <div class="cart-total" id="cart-total">總金額：NT$ 0</div>
+      <div class="cart-actions">
+        <button class="send-btn" onclick="submitCart()">送出訂單</button>
+        <button class="clear-btn" onclick="clearCart()">清空</button>
+      </div>
+    </aside>
+
+    <script>
+      const cart = [];
+      function toggleCart() {
+        document.getElementById("cart").classList.toggle("active");
+        renderCart();
+      }
+
+      function closeCart() {
+        document.getElementById("cart").classList.remove("active");
+      }
+
+      function addToCart(btn, title, price) {
+        const quantityInput = btn
+          .closest(".card-content")
+          .querySelector("input");
+        const quantity = parseInt(quantityInput.value);
+        const existing = cart.find((item) => item.title === title);
+        if (existing) {
+          existing.quantity += quantity;
+        } else {
+          cart.push({ title, price, quantity });
+        }
+        renderCart();
+      }
+
+      function renderCart() {
+        const cartItems = document.getElementById("cart-items");
+        cartItems.innerHTML = "";
+        let total = 0;
+        cart.forEach((item, i) => {
+          total += item.price * item.quantity;
+          cartItems.innerHTML += `
+          <div class="cart-item">
+            <span>${item.title}</span>
+            <span>數量：${item.quantity}</span>
+            <span>價格：NT$ ${item.price * item.quantity}</span>
+            <button onclick="removeItem(${i})">刪除</button>
+          </div>
+        `;
+        });
+        document.getElementById(
+          "cart-total"
+        ).textContent = `總金額：NT$ ${total.toLocaleString()}`;
+      }
+
+      function removeItem(index) {
+        cart.splice(index, 1);
+        renderCart();
+      }
+
+      function clearCart() {
+        cart.length = 0;
+        renderCart();
+      }
+
+      function submitCart() {
+        if (cart.length === 0) {
+          alert("購物車是空的！");
+          return;
+        }
+        console.log("模擬送出資料：", JSON.stringify(cart, null, 2));
+        alert("已送出訂單！（模擬寫入資料庫）");
+        clearCart();
+        document.getElementById("cart").classList.remove("active");
+      }
+    </script>
+  </body>
+</html>
